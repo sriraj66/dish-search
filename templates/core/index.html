@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block main %}
+
+<style>
+    .card-title{
+        text-align: center;
+        font-weight: bold;
+        font-size: 26px;
+    }
+    #loc_button{
+        min-width: 50px;
+        width: 200px;
+    }
+    #loc_button:hover{
+        color: rgb(49, 49, 49);
+    }
+    #loc_button p{
+        margin-top: 5px;
+    }
+    input{
+        height: 100%;
+        font-size: 20px;
+        letter-spacing: 1.4px;
+    }
+    .search-btn{
+        font-size: 18px;
+        background-color: blue;
+        color: white;
+    }
+    .search-btn:hover{
+        border: 1px solid blue;
+
+        color: blue;
+    }
+
+    .search-form{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+        }
+    #dish{
+        width: 70% !important;
+    }
+    @media only screen and (max-width: 600px) {
+        .search-form{
+            display: flex;
+            flex-direction: column;
+        }
+        #dish{
+            width: 100% !important;
+
+        }
+        .search-btn{
+            font-size: 15px;
+            display: flex;
+            color: blue;
+            background-color: transparent;
+        }
+        .search-form div{
+            width: 100%;
+            display: flex;
+            margin-top: 10px;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+    }
+
+</style>
+
+<form
+    hx-post="{% url 'search_results' %}"
+    hx-swap="innerHTML"
+    hx-target="#result-wraper"
+    hx-on::after-request="this.reset()"
+
+>
+    {% csrf_token %}
+
+    <div class="card">
+        <br>
+        <div class="card-title">
+            Django search application
+        </div>
+        <div class="card-body">
+            <div class="search-form">
+                <input type="text" class="form-control" name="dish" id="dish" placeholder="Dish Name">
+                <div class="btn-group">
+                    <button type="button" class="btn" id="loc_button" onclick="getLocation()"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><p><small id="loc_placeholder">Get Location</small></p></button>
+                    <button type="submit" id="sub_btn" class="btn search-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<br><br>
+
+
+<div class="container" id="result-wraper">
+    {% include 'core/partial/results.html' %}
+</div>
+
+
+
+<script>
+function getLocation() {
+    document.getElementById("loc_placeholder").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-loader"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>`;
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    document.getElementById("loc_placeholder").innerText = lat + "," + lon;
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+    }
+}
+
+function handleLoading(){
+    var search_results = document.getElementById("result-wraper");
+    search_results.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-loader"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg> Serching for best matches...`;
+}
+
+</script>
+
+{% endblock %}

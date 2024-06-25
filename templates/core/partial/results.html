@@ -1,0 +1,86 @@
+{% if results %}
+<div class="container">
+    <div class="clearfix">
+        <div class="float-start">
+            Foods Avilable for your Taste!!
+        </div>
+        <div class="float-end">
+            Top picks {{len}} outof {{outof}}
+        </div>
+    </div>
+    <br>
+    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2">
+        {% for result in results %}
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header clearfix card-text">
+                    <p class="float-start">{{ result.res }}</p>
+                    <p class="float-end"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> {{ result.loc }}</p>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ result.name }}</h5>
+                    <p class="card-text">
+                        Price: <strong>Rs. {{ result.price }}</strong>
+                        <div class="clearfix">
+                            <div class="float-start">
+                                <p>Rating: {{ result.rating }} ({{ result.user_rating }})</p>
+                            </div>
+                            <div class="float-end">
+                                Votes: {{ result.votes }}
+                            </div>
+                        </div>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-text">
+                        Distance: {{ result.distance }} km
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if alt %}
+
+<div class="container">
+    <div class="div">
+        <p>No Dishes found !!</p>
+        <small>Here are some matches your Flavour's</small>
+    </div>
+    <br>
+    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2">
+        {% for result in alt %}
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header clearfix card-text">
+                    <p class="float-start">{{ result.res }}</p>
+                    <p class="float-end"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> {{ result.loc }}</p>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ result.name }}</h5>
+                    <p class="card-text">
+                        Price: <strong>Rs. {{ result.price }}</strong>
+                        <div class="clearfix">
+                            <div class="float-start">
+                                <p>Rating: {{ result.rating }} ({{ result.user_rating }})</p>
+                            </div>
+                            <div class="float-end">
+                                Votes: {{ result.votes }}
+                            </div>
+                        </div>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-text">
+                        Distance: {{ result.distance }} km
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
